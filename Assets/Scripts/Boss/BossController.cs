@@ -4,33 +4,23 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
-    // Event to signal a phase change
     public static event System.Action<int> PhaseChange;
 
-    //Ring
-    public GameObject ring;
+    [SerializeField] private GameObject ring;
+    [SerializeField] private int maxBossHealth = 100;
+    [SerializeField] private List<int> bossPhasePlan = new List<int>();
 
-    // Phase variables
-    private int currentPhase = 1;
-
-    [SerializeField]
-    private int currentBossHealth;
-    [SerializeField]
-    private int maxBossHealth = 100;
-    //[SerializeField]
-    //private int numOfBossHealthBars = 5;
-
-    //[SerializeField] HealthBar healthbar;
+    [SerializeField] private int currentBossHealth; //just have it serialized to be see it for debugging
+    [SerializeField] private int currentPhaseIndex = 0; //just have it serialized to be see it for debugging
 
     private void Start()
     {
-        // Initialize currentBossHealth to maxBossHealth at the start
         currentBossHealth = maxBossHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        /*
         // For testing purposes, switch phases on '1' or '2' key press
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -48,39 +38,31 @@ public class BossController : MonoBehaviour
         {
             SwitchPhase(4);
         }
+        */
     }
 
-    // Method to switch phases and trigger the PhaseChange event
     private void SwitchPhase(int newPhase)
     {
-        if (newPhase != currentPhase)
-        {
-            currentPhase = newPhase;
+        currentBossHealth = maxBossHealth;
 
-            // Trigger the PhaseChange event
-            PhaseChange?.Invoke(currentPhase);
+        // Trigger the PhaseChange event
+        PhaseChange?.Invoke(newPhase);
+        Debug.Log("Switched to Phase " + newPhase);
 
-            // Print debug message
-            Debug.Log("Switched to Phase " + currentPhase);
-
-            GameManager.gameManager.SetBossPhase(newPhase);
-
-            EnableBossRing(currentPhase);
-        }
+        GameManager.gameManager.SetBossPhase(newPhase);
+        EnableBossRing(newPhase);
     }
-    private void EnableBossRing(int currentPhase)
+
+    private void EnableBossRing(int phase)
     {
-        if(currentPhase == 1) ring.SetActive(true);
-        else ring.SetActive(false);
+        ring.SetActive(phase == 1);
     }
 
-    // Method to get the current phase
     public int GetCurrentPhase()
     {
-        return currentPhase;
+        return bossPhasePlan[currentPhaseIndex];
     }
 
-     // Function to inflict damage to the player
     public void DamageBoss(int damageAmount)
     {
         currentBossHealth -= damageAmount;
@@ -88,13 +70,16 @@ public class BossController : MonoBehaviour
 
         Debug.Log("Damage Taken; Boss HP: " + currentBossHealth);
 
-        //healthbar.setHealth(currentHealth);
-
-        // Check if the player is dead
-        if (currentBossHealth <= 0)
+        if (currentBossHealth <= 0 && currentPhaseIndex == bossPhasePlan.Count - 1)
         {
-            //BossDefeat();
             Debug.Log("Boss defeated!");
+        }
+        else if (currentBossHealth <= 0 && currentPhaseIndex < bossPhasePlan.Count - 1)
+        {
+            currentPhaseIndex++;
+            Debug.Log("Attempt to switch to phase: " + bossPhasePlan[currentPhaseIndex]);
+            SwitchPhase(bossPhasePlan[currentPhaseIndex]);
         }
     }
 }
+

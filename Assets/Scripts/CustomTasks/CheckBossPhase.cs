@@ -2,7 +2,7 @@ using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
-public class GetBossPhase : Conditional
+public class CheckBossPhase : Conditional
 {
     public int conditionalBossPhase;
 

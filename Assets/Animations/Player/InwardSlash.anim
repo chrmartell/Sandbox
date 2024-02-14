@@ -62914,14 +62914,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.9333333
+  - time: 1.7666667
     functionName: TriggerDisableSwordHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.1
+  - time: 1.9
     functionName: ResetAttack
     data: 
     objectReferenceParameter: {fileID: 0}

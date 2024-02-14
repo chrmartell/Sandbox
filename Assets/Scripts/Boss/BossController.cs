@@ -6,6 +6,7 @@ public class BossController : MonoBehaviour
 {
     public static event System.Action<int> PhaseChange;
 
+    public BossWeaponBehavior bossWeaponBehavior;
     [SerializeField] private GameObject ring;
     [SerializeField] private int maxBossHealth = 100;
     [SerializeField] private List<int> bossPhasePlan = new List<int>();
@@ -80,6 +81,18 @@ public class BossController : MonoBehaviour
             Debug.Log("Attempt to switch to phase: " + bossPhasePlan[currentPhaseIndex]);
             SwitchPhase(bossPhasePlan[currentPhaseIndex]);
         }
+    }
+
+    // Called using animation event
+    public void TriggerEnableBossWeaponHitbox()
+    {
+        bossWeaponBehavior.EnableBossWeaponHitbox();
+    }
+
+    // Called using animation event
+    public void TriggerDisableBossWeaponHitbox()
+    {
+        bossWeaponBehavior.DisableBossWeaponHitbox();
     }
 }
 

@@ -14,32 +14,32 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private Camera playerCamera;
     private Animator animator;
 
-    //movement fields
+    [Header("Movement Variables")]
     private Rigidbody rb;
     [SerializeField] private float movementForce = 1f;
     [SerializeField] private float maxSpeed = 5f;
     private Vector3 forceDirection = Vector3.zero;
 
-    //Attack fields
+    [Header("Attack Variables")]
     public WeaponBehavior weaponBehavior;
     bool isAttacking = false;
     private float timeSinceAttack;
     public int currentAttack = 1;
 
-    //Dash fields
+    [Header("Dash Variables")]
     bool isDashing = false;
     public GameObject dashPoint; // Reference to the DashPoint GameObject
     public LayerMask obstacleLayer; // LayerMask to filter obstacles
     private Vector3 initialDashPointPosition; // Initial position of DashPoint when dash is initiated
-     // Define the duration of the dash animation (in seconds)
+    // Define the duration of the dash animation (in seconds)
     [SerializeField] private float dashDuration = 0.3f;  // Adjust this value to increase/decrease speed
     private bool cancelDash = false; // Flag to track if the dash should be cancelled
 
-    //Block fields
+    [Header("Block Variables")]
     //bool isBlocking = false;
     public ShieldController shieldController;
 
-    //Shoot fields
+    [Header("Shoot Variables")]
     public GameObject BulletPrefab;
     public Transform FirePosition;
     public GameObject MouseTarget;
@@ -96,6 +96,7 @@ public class ThirdPersonController : MonoBehaviour
 
         PlayerLookAt();
     }
+
     private void LateUpdate()
     {
         // Check if the dash should be cancelled
@@ -206,9 +207,45 @@ public class ThirdPersonController : MonoBehaviour
 
         //Call Attack Triggers
         animator.SetTrigger("attack" + currentAttack);
-            
+                
         //Reset Timer
         timeSinceAttack = 0;
+        /*if (!isAttacking)
+        {
+            isAttacking = true;
+            rb.velocity = Vector3.zero;
+            Debug.Log("DoAttack_isAttacking " + isAttacking);
+
+            currentAttack++;
+
+            if (currentAttack > 3)
+                currentAttack = 1;
+
+            // Call Attack Triggers
+            animator.SetTrigger("attack" + currentAttack);
+
+            // Reset Timer
+            timeSinceAttack = 0;
+        }
+        else if (currentAttack < 3 && timeSinceAttack > 0.5f) // Assuming each attack animation takes at least 0.5 seconds
+        {
+            currentAttack++;
+            animator.SetTrigger("attack" + currentAttack);
+            timeSinceAttack = 0;
+        }
+        else if (currentAttack == 3 && timeSinceAttack > 0.5f)
+        {
+            // Reset the combo if the player hasn't attacked in 0.5 seconds after the third attack
+            currentAttack = 1;
+            animator.SetTrigger("attack" + currentAttack);
+            timeSinceAttack = 0;
+        }
+        else if (timeSinceAttack > 1.2f) // Reset the combo if no attack is performed for 1.2 seconds
+        {
+            currentAttack = 1;
+            animator.SetTrigger("attack" + currentAttack);
+            timeSinceAttack = 0;
+        }*/
     }
 
     // Called using animation event

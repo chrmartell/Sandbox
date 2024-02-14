@@ -9,6 +9,7 @@ TagManager:
   - MouseTarget
   - Ring
   - Wall
+  - Projectile
   layers:
   - Default
   - TransparentFX
